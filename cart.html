@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Cart</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://kit.fontawesome.com/ac42c3b1f7.js" crossorigin="anonymous"></script>
+  <style>
+    body { background-color: #f9fafc; }
+    .cart-item { border-bottom: 1px solid #ddd; padding: 15px 0; }
+    .cart-item img { width: 80px; border-radius: 10px; }
+    .cart-summary { text-align: right; font-weight: bold; margin-top: 20px; }
+  </style>
+</head>
+<body class="container py-4">
+  <a href="home.html" class="btn btn-secondary"><i class="fas fa-arrow-left "></i></a>
+  <h2 class="text-center mb-4">🛒 Your Cart</h2>
+  <div id="cartContainer"></div>
+  <div id="cartSummary" class="cart-summary"></div>
+  <div class="text-center mt-3">
+    <button class="btn btn-success" id="payBtn">Payment</button>
+  </div>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cartContainer = document.getElementById("cartContainer");
+    const summary = document.getElementById("cartSummary");
+
+    function saveCart() {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+
+    function renderCart() {
+      if (cart.length === 0) {
+        cartContainer.innerHTML = "<h4 class='text-center text-muted'>Your cart is empty!</h4>";
+        summary.innerHTML = "";
+        return;
+      }
+
+      cartContainer.innerHTML = cart.map((item, index) => `
+        <div class="cart-item d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center">
+            <img src="${item.img}" alt="${item.name}">
+            <div class="ml-3">
+              <h5>${item.name}</h5>
+              <p class="text-muted mb-0">₹${item.price}</p>
+            </div>
+          </div>
+          <div class="d-flex align-items-center">
+            <button class="btn btn-outline-secondary btn-sm mr-2" onclick="decreaseQty(${index})">−</button>
+            <span>${item.qty}</span>
+            <button class="btn btn-outline-secondary btn-sm ml-2" onclick="increaseQty(${index})">+</button>
+            <button class="btn btn-danger btn-sm ml-3" onclick="removeItem(${index})">Remove</button>
+          </div>
+        </div>
+      `).join("");
+
+      const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      summary.innerHTML = `<h4>Total: ₹${total}</h4>`;
+    }
+
+    function increaseQty(index) {
+      cart[index].qty++;
+      saveCart();
+      renderCart();
+    }
+
+    function decreaseQty(index) {
+      if (cart[index].qty > 1) {
+        cart[index].qty--;
+      } else {
+        cart.splice(index, 1);
+      }
+      saveCart();
+      renderCart();
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      saveCart();
+      renderCart();
+    }
+
+    document.getElementById("payBtn").addEventListener("click", () => {
+      if (cart.length === 0) {
+        alert("🛍️ Your cart is empty!");
+        return;
+      }
+      alert("✅ Payment Successful! Thank you for your order.");
+      localStorage.removeItem("cart");
+      window.location.href = "home.html";
+    });
+
+    renderCart();
+  </script>
+</body>
+</html>

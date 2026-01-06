@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <style>
+    /* Page background */
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Login box */
+    .login-box {
+      background: white;
+      padding: 40px 35px;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      width: 350px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .login-box:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Heading */
+    .login-box h2 {
+      margin-bottom: 25px;
+      color: #333;
+    }
+
+    /* Input fields */
+    .login-box input[type="text"],
+    .login-box input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      outline: none;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    .login-box input[type="text"]:focus,
+    .login-box input[type="password"]:focus {
+      border-color: #2575fc;
+      box-shadow: 0 0 8px rgba(37, 117, 252, 0.5);
+    }
+
+    /* Login button */
+    .login-box button {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      border: none;
+      color: white;
+      padding: 12px 20px;
+      width: 100%;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    .login-box button:hover {
+      background: linear-gradient(135deg, #2575fc, #6a11cb);
+      transform: scale(1.03);
+    }
+
+    /* Extra links */
+    .login-box a {
+      display: block;
+      margin-top: 15px;
+      color: #2575fc;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.3s;
+    }
+
+    .login-box a:hover {
+      color: #6a11cb;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>Login</h2>
+    <form>
+      <input type="text" placeholder="Username" required>
+      <input type="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+      <a href="forget.html">Forgot Password?</a>
+      <a href="signup.html">Create New Account</a>
+    </form>
+  </div>
+  <script>
+  document.querySelector("form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const username = document.querySelector('input[placeholder="Username"]').value.trim();
+    const password = document.querySelector('input[placeholder="Password"]').value;
+
+    const storedUser = JSON.parse(localStorage.getItem("userData"));
+
+    if (!storedUser) {
+      alert("⚠️ No account found! Please sign up first.");
+      return;
+    }
+
+    if (username === storedUser.username && password === storedUser.password) {
+      alert(✅ Welcome back, ${storedUser.name}!);
+      // Example: redirect to dashboard.html (if you have one)
+      // window.location.href = "dashboard.html";
+    } else {
+      alert("❌ Invalid username or password!");
+    }
+  });
+</script>
+</body>
+</html>
